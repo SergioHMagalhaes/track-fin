@@ -1,0 +1,8 @@
+{
+  "name": "TrackFin",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "efd4a928"
+}
