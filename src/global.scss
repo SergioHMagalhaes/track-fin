@@ -24,3 +24,20 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+
+
+
+@font-face {
+  font-family: "Roboto-Black";
+  src: url("./assets/fonts/Roboto-Black.ttf");
+}
+
+@font-face {
+  font-family: "Roboto-Regular";
+  src: url("./assets/fonts/Roboto-Regular.ttf");
+}
+
+
+html {
+  --ion-font-family: "Roboto-Regular", sans-serif;
+}

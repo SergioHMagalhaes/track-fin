@@ -1,0 +1,69 @@
+<ion-content [fullscreen]="true">
+  <nav>
+    <ion-grid>
+      <ion-row>
+        <ion-col class="avat">
+          <div>
+            <ion-avatar aria-hidden="true" slot="start">
+              <img alt="profile picture" src="https://i.ibb.co/1GKmYt8/Es-Xs-Fkb-WMAIGfpp.jpg" />
+            </ion-avatar>
+          </div>
+        </ion-col>
+        <ion-col class="info">
+          <ion-icon class="icon"  size="large" name="alert-circle-outline"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </nav>
+
+
+  <ion-text class="balance">
+    <p>Saldo em contas</p>
+    <h1>R$ 55,99</h1>
+  </ion-text>
+
+  <div class="action-buttons">
+    <ion-button shape="round" >Adicionar</ion-button>
+    <ion-button fill="outline" shape="round">Transferir</ion-button>
+  </div>
+
+  <ion-list class="transactions">
+    <h2>Transações</h2>
+    <ion-item>
+      <ion-icon slot="start" name="arrow-down-outline"></ion-icon>
+      <ion-label>
+        <h5>Transferência</h5>
+        <p>Recebido</p>
+      </ion-label>
+      <ion-text color="danger" slot="end">R$ 55,99</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="arrow-up-outline"></ion-icon>
+      <ion-label>
+        <h5>Transferência</h5>
+        <p>Enviado</p>
+      </ion-label>
+      <ion-text color="success" slot="end">R$ 55,99</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="arrow-down-outline"></ion-icon>
+      <ion-label>
+        <h5>Transferência</h5>
+        <p>Recebido</p>
+      </ion-label>
+      <ion-text color="danger" slot="end">R$ 55,99</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="arrow-up-outline"></ion-icon>
+      <ion-label>
+        <h5>Transferência</h5>
+        <p>Enviado</p>
+      </ion-label>
+      <ion-text color="success" slot="end">R$ 55,99</ion-text>
+    </ion-item>
+  </ion-list>
+
+
+
+
+</ion-content>
