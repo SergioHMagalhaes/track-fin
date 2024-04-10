@@ -23,8 +23,8 @@
   </ion-text>
 
   <div class="action-buttons">
-    <ion-button shape="round" >Adicionar</ion-button>
-    <ion-button fill="outline" shape="round">Transferir</ion-button>
+    <ion-button shape="round" (click)="showModal(true, type.sent)">Adicionar</ion-button>
+    <ion-button fill="outline" (click)="showModal(true, type.received)" shape="round">Transferir</ion-button>
   </div>
 
   <ion-list class="transactions">
@@ -62,4 +62,8 @@
       <ion-text color="success" slot="end">R$ 55,99</ion-text>
     </ion-item>
   </ion-list>
+
+
+  <app-transfer></app-transfer>
+
 </ion-content>

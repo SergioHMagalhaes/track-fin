@@ -1,0 +1,55 @@
+<ion-modal [isOpen]="isModalOpen" (ionModalDidDismiss)="setOpen(false)">
+  <ng-template>
+    <ion-item>
+      <ion-buttons slot="end">
+        <ion-button (click)="setOpen(false)">Close</ion-button>
+      </ion-buttons>
+    </ion-item>
+
+    <ion-content>
+      <form [formGroup]="modalType === type.sent ? formSent : formReceived">
+		<ion-item class="currency-input {{modalType === type.sent ? 'received' : 'sent'}}">
+			<input formControlName="value" currencyMask #currencyInput (click)="moveCursorToEnd()">
+		</ion-item>
+
+        <ion-item class="first-item">
+          <ion-icon slot="start" name="brush-outline" aria-hidden="true"></ion-icon>
+          <ion-input labelPlacement="stacked" label="Descrição" placeholder="Adicione a descrição">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon slot="start" [name]="selectedIcon()" aria-hidden="true"></ion-icon>
+          <ion-select formControlName="category" aria-label="Categoria" interface="action-sheet" placeholder="Adicione uma categoria">
+            <ion-select-option value="restaurant">
+              Alimentação
+            </ion-select-option>
+            <ion-select-option value="happy">
+              Lazer
+            </ion-select-option>
+            <ion-select-option value="list">
+              Outros
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon slot="start" name="calendar-outline" aria-hidden="true"></ion-icon>
+          <ion-datetime-button datetime="datetime"></ion-datetime-button>
+
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime id="datetime"></ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </ion-item>
+
+        <ion-fab horizontal="center" vertical="bottom">
+          <ion-fab-button>
+            <ion-icon name="checkmark-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+      </form>
+    </ion-content>
+  </ng-template>
+</ion-modal>
