@@ -1,0 +1,12 @@
+.graphic {
+  display: flex;
+  justify-content: center;
+  canvas {
+    max-width:500px;
+    max-height: 500px;
+  }
+}
+
+ion-card {
+  border-radius: 20px;
+}
