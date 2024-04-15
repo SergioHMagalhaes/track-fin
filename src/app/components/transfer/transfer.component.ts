@@ -5,6 +5,7 @@ import * as dayjs from "dayjs";
 import { TransferService } from "../../services/transfer/transfer.service";
 import { Subscription } from 'rxjs';
 import { Type } from 'src/app/models/transfer';
+import { DbService, Models } from 'src/app/services/db/db.service';
 
 @Component({
   selector: 'app-transfer',
@@ -28,19 +29,22 @@ export class TransferComponent implements OnDestroy, OnInit {
   constructor(
     private readonly transferService: TransferService,
     private readonly formBuilder: FormBuilder,
+    private readonly dbService: DbService
   ) {
     this.formSent = this.formBuilder.group({
-      value: 0,
+      amount: 0,
       description: ["", Validators.required],
       category: ["", Validators.required],
       date: [dayjs().format("YYYY-MM-DDTHH:mm:ssZ"), Validators.required],
+      type: Type.sent
 		});
 
     this.formReceived = this.formBuilder.group({
-      value: 0,
+      amount: 0,
       description: ["", Validators.required],
       category: ["", Validators.required],
       date: [dayjs().format("YYYY-MM-DDTHH:mm:ssZ"), Validators.required],
+      type: Type.received
 		});
   }
 
@@ -86,4 +90,12 @@ export class TransferComponent implements OnDestroy, OnInit {
         })
 		);
 	}
+
+  public save (): void {
+    if (this.modalType === Type.sent)
+      this.dbService.save(Models.transfer, this.formSent.value);
+    else
+      this.dbService.save(Models.transfer, this.formReceived.value);
+    this.setOpen(false);
+  }
 }

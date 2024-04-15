@@ -9,12 +9,12 @@
     <ion-content>
       <form [formGroup]="modalType === type.sent ? formSent : formReceived">
 		<ion-item class="currency-input {{modalType === type.sent ? 'received' : 'sent'}}">
-			<input formControlName="value" currencyMask #currencyInput (click)="moveCursorToEnd()">
+			<input formControlName="amount" currencyMask #currencyInput (click)="moveCursorToEnd()">
 		</ion-item>
 
         <ion-item class="first-item">
           <ion-icon slot="start" name="brush-outline" aria-hidden="true"></ion-icon>
-          <ion-input labelPlacement="stacked" label="Descrição" placeholder="Adicione a descrição">
+          <ion-input  formControlName="description" labelPlacement="stacked" label="Descrição" placeholder="Adicione a descrição">
           </ion-input>
         </ion-item>
 
@@ -39,12 +39,12 @@
 
           <ion-modal [keepContentsMounted]="true">
             <ng-template>
-              <ion-datetime id="datetime"></ion-datetime>
+              <ion-datetime formControlName="date" id="datetime"></ion-datetime>
             </ng-template>
           </ion-modal>
         </ion-item>
 
-        <ion-fab horizontal="center" vertical="bottom">
+        <ion-fab horizontal="center" vertical="bottom" (click)="save()">
           <ion-fab-button>
             <ion-icon name="checkmark-outline"></ion-icon>
           </ion-fab-button>

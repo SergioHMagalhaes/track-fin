@@ -29,41 +29,17 @@
 
   <ion-list class="transactions">
     <h2>Transações</h2>
-    <ion-item>
-      <ion-icon slot="start" name="arrow-down-outline"></ion-icon>
+    <ion-item *ngFor="let transfer of transfers">
+      <ion-icon slot="start" [name]="transfer.type === type.sent? 'arrow-up-outline': 'arrow-down-outline'"></ion-icon>
       <ion-label>
         <h5>Transferência</h5>
-        <p>Recebido</p>
+        <p>{{ transfer.type === type.sent? 'Recebido': 'Pago' }}</p>
       </ion-label>
-      <ion-text color="danger" slot="end">R$ 55,99</ion-text>
-    </ion-item>
-    <ion-item>
-      <ion-icon slot="start" name="arrow-up-outline"></ion-icon>
-      <ion-label>
-        <h5>Transferência</h5>
-        <p>Enviado</p>
-      </ion-label>
-      <ion-text color="success" slot="end">R$ 55,99</ion-text>
-    </ion-item>
-    <ion-item>
-      <ion-icon slot="start" name="arrow-down-outline"></ion-icon>
-      <ion-label>
-        <h5>Transferência</h5>
-        <p>Recebido</p>
-      </ion-label>
-      <ion-text color="danger" slot="end">R$ 55,99</ion-text>
-    </ion-item>
-    <ion-item>
-      <ion-icon slot="start" name="arrow-up-outline"></ion-icon>
-      <ion-label>
-        <h5>Transferência</h5>
-        <p>Enviado</p>
-      </ion-label>
-      <ion-text color="success" slot="end">R$ 55,99</ion-text>
+      <ion-text [color]="transfer.type === type.sent? 'success': 'danger'" slot="end">
+        {{ transfer.amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
+      </ion-text>
     </ion-item>
   </ion-list>
-
-
   <app-transfer></app-transfer>
 
 </ion-content>
