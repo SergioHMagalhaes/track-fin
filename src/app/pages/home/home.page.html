@@ -30,19 +30,30 @@
     <ion-button fill="outline" (click)="showModal(true, type.sent)" shape="round">Transferir</ion-button>
   </div>
 
-  <ion-list class="transactions">
-    <h2>Transações</h2>
-    <ion-item *ngFor="let transfer of transfers" (click)="showModal(true, transfer.type, transfer)">
-      <ion-icon slot="start" [name]="transfer.type === type.sent? 'arrow-up-outline': 'arrow-down-outline'"></ion-icon>
-      <ion-label>
-        <h5>Transferência</h5>
-        <p>{{ transfer.type === type.sent? 'Pago': 'Recebido' }}</p>
-      </ion-label>
-      <ion-text [color]="transfer.type === type.sent? 'danger': 'success'" slot="end">
-        {{ transfer.amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
-      </ion-text>
-    </ion-item>
-  </ion-list>
-  <app-transfer></app-transfer>
+  @if(transfers.length > 0) {
 
+    <ion-list class="transactions">
+      <h2>Transações</h2>
+      <ion-item *ngFor="let transfer of transfers" (click)="showModal(true, transfer.type, transfer)">
+        <ion-icon slot="start" [name]="transfer.type === type.sent? 'arrow-up-outline': 'arrow-down-outline'"></ion-icon>
+        <ion-label>
+          <h5>Transferência</h5>
+          <p>{{ transfer.type === type.sent? 'Pago': 'Recebido' }}</p>
+        </ion-label>
+        <ion-text [color]="transfer.type === type.sent? 'danger': 'success'" slot="end">
+          {{ transfer.amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
+        </ion-text>
+      </ion-item>
+    </ion-list>
+
+  } @else {
+
+    <ion-text class="no-transactions">
+      <h2>Nenhuma transação</h2>
+      <p>Adicione uma transação para começar a ver seu histórico</p>
+    </ion-text>
+
+  }
+
+  <app-transfer></app-transfer>
 </ion-content>
