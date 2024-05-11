@@ -21,14 +21,8 @@
         <ion-item>
           <ion-icon slot="start" [name]="selectedIcon()" aria-hidden="true"></ion-icon>
           <ion-select formControlName="category" aria-label="Categoria" interface="action-sheet" placeholder="Adicione uma categoria">
-            <ion-select-option value="restaurant">
-              Alimentação
-            </ion-select-option>
-            <ion-select-option value="happy">
-              Lazer
-            </ion-select-option>
-            <ion-select-option value="list">
-              Outros
+            <ion-select-option *ngFor="let category of filterCategories"  [value]="category">
+              {{ category.name }}
             </ion-select-option>
           </ion-select>
         </ion-item>

@@ -25,27 +25,36 @@ export class AnalyticsPage implements OnInit, ViewDidEnter {
       { data: this.revenueExpensesMatrix.dataOutflows, label: 'Saídas',  backgroundColor: '#eb445a' }
     ]
   };
-
-  public doughnutChartLabels: string[] = [
-    'Alimentação',
-    'Lazer',
-    'outros'
+  public doughnutChartLabels: string[] = [];
+  public doughnutChartDatasets: ChartConfiguration<'doughnut'>['data']['datasets'] = [
+    { data: [],
+      backgroundColor: [
+        '#4ea39c',
+        '#36a2eb',
+        '#7221aa',
+        '#ff6384',
+        '#ffcd56',
+        '#ffC0CB',
+        '#054606',
+      ],
+    },
   ];
-  public doughnutChartDatasets: ChartConfiguration<'doughnut'>['data']['datasets'] =
-    [
-      { data: [350, 450, 100] },
-    ];
+  public doughnutColors:any[] = [
+    { backgroundColor: ["#86c7f3", "#ffe199"] }
+  ];
 
   constructor(
-    private readonly analyticsService: AnalyticsService
+    private readonly analyticsService: AnalyticsService,
   ) {}
 
   public async ngOnInit() {
     this.setBarChartData();
+    this.setDoughnutChartData();
   }
 
   public async ionViewDidEnter() {
     this.setBarChartData();
+    this.setDoughnutChartData();
   }
 
   public barChartOptions: ChartConfiguration<'bar'>['options'] = {
@@ -76,5 +85,12 @@ export class AnalyticsPage implements OnInit, ViewDidEnter {
     this.barChartData.datasets[1].data = this.revenueExpensesMatrix.dataOutflows;
     if (this.chart)
       this.chart.update();
+  }
+
+  public async setDoughnutChartData () {
+    const { data, labels } = await this.analyticsService.getExpensesByCategoriesMatrix();
+    this.doughnutChartLabels = labels;
+    this.doughnutChartDatasets[0].data = data;
+
   }
 }

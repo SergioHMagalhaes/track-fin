@@ -5,7 +5,8 @@ export enum Type {
 
 export interface ITransfer {
   id?: number;
-  category: Type;
+  categoryIcon: string;
+  categoryName: string;
   description: string;
   amount: number;
   date: Date;

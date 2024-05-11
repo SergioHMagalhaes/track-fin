@@ -5,8 +5,10 @@ import * as dayjs from "dayjs";
 import { TransferService } from "../../services/transfer/transfer.service";
 import { Subscription } from 'rxjs';
 import { ITransfer, Type } from 'src/app/models/transfer';
-import { DbService, Models } from 'src/app/services/db/db.service';
+import { DbService } from 'src/app/services/db/db.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
+import { CategoryService } from 'src/app/services/category/category.service';
+import { ICategory, CategoryName } from 'src/app/models/category';
 
 @Component({
   selector: 'app-transfer',
@@ -14,8 +16,8 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
   styleUrls: ['./transfer.component.scss'],
 })
 export class TransferComponent implements OnDestroy, OnInit {
-
   @ViewChild('currencyInput') currencyInput: ElementRef | undefined;
+
   public isModalOpen: boolean = false;
   public modalType: Type = Type.Inflows;
   public formOutflows: FormGroup;
@@ -23,10 +25,12 @@ export class TransferComponent implements OnDestroy, OnInit {
   public value: number = 0;
   public type = Type;
   public editableEvent?: ITransfer;
+  public categories: ICategory[] = [];
 
   private subscriptions: Array<Subscription | undefined> = [];
 
   constructor(
+    private readonly categoryService: CategoryService,
     private readonly transferService: TransferService,
     private readonly formBuilder: FormBuilder,
     private readonly dbService: DbService,
@@ -36,7 +40,7 @@ export class TransferComponent implements OnDestroy, OnInit {
       id: null,
       amount: 0,
       description: ["", Validators.required],
-      category: ["", Validators.required],
+      category: [null, Validators.required],
       date: [dayjs().format("YYYY-MM-DDTHH:mm:ssZ"), Validators.required],
       type: Type.Outflows
 		});
@@ -45,14 +49,20 @@ export class TransferComponent implements OnDestroy, OnInit {
       id: null,
       amount: 0,
       description: ["", Validators.required],
-      category: ["", Validators.required],
+      category: [null, Validators.required],
       date: [dayjs().format("YYYY-MM-DDTHH:mm:ssZ"), Validators.required],
       type: Type.Inflows
 		});
   }
 
+  public get filterCategories (): ICategory[] {
+    return this.categories.filter(category => category.type === this.modalType);
+  }
+
   ngOnInit (): void {
+    this.categories = this.categoryService.categories;
 		this.getDisplay();
+    this.prepareForm();
 	}
 
 	ngOnDestroy (): void {
@@ -74,11 +84,11 @@ export class TransferComponent implements OnDestroy, OnInit {
   public selectedIcon () {
     let icon
     if (this.modalType === Type.Outflows)
-      icon = this.formOutflows.get('category')?.value as string;
+      icon = this.formOutflows.get('category')?.value as ICategory;
     else
-      icon = this.formInflows.get('category')?.value as string;
+      icon = this.formInflows.get('category')?.value as ICategory;
     if (icon)
-      return icon;
+      return icon.icon;
     else
       return 'list';
   }
@@ -98,6 +108,9 @@ export class TransferComponent implements OnDestroy, OnInit {
 
   public async save (): Promise<void> {
     const form = this.modalType === Type.Outflows ? this.formOutflows.value : this.formInflows.value;
+    form.categoryIcon = form.category.icon;
+    form.categoryName = form.category.name;
+    delete form.category;
     delete form.id;
     await this.transferService.addTransfer(form);
 
@@ -108,6 +121,9 @@ export class TransferComponent implements OnDestroy, OnInit {
 
   public async update (): Promise<void> {
     const form = this.modalType === Type.Outflows ? this.formOutflows.value : this.formInflows.value;
+    form.categoryIcon = form.category.icon;
+    form.categoryName = form.category.name;
+    delete form.category;
     await this.transferService.updateTransfer(form);
 
     await this.transferService.setTransfers();
@@ -137,20 +153,22 @@ export class TransferComponent implements OnDestroy, OnInit {
     form.get("id")?.setValue(null);
     form.get("amount")?.setValue(0);
     form.get("description")?.setValue("");
-    form.get("category")?.setValue("");
+    form.get("category")?.setValue(this.categoryService.getCategoryByName(CategoryName.Others, this.modalType));
     form.get("date")?.setValue(dayjs().format("YYYY-MM-DDTHH:mm:ssZ"));
 
   }
 
   private prepareForm (): void {
-    if (this.editableEvent) {
-      const form = this.modalType === Type.Outflows ? this.formOutflows : this.formInflows;
+    const form = this.modalType === Type.Outflows ? this.formOutflows : this.formInflows;
 
+    if (this.editableEvent) {
       form.get("id")?.setValue(this.editableEvent.id || null);
       form.get("amount")?.setValue(this.editableEvent.amount || 0);
       form.get("description")?.setValue(this.editableEvent.description || "");
-      form.get("category")?.setValue(this.editableEvent.category || "");
+      form.get("category")?.setValue(this.categoryService.getCategoryByName(this.editableEvent.categoryName, this.modalType) || this.categoryService.getCategoryByName(CategoryName.Others, this.modalType));
       form.get("date")?.setValue(this.editableEvent.date || dayjs().format("YYYY-MM-DDTHH:mm:ssZ"));
+    } else {
+      form.get("category")?.setValue(this.categoryService.getCategoryByName(CategoryName.Others, this.modalType));
     }
   }
 }
