@@ -1,18 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ViewDidEnter } from '@ionic/angular';
 import { ChartConfiguration } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
+import { AnalyticsService, RevenueExpensesMatrix } from 'src/app/services/analytics/analytics.service';
 
 @Component({
   selector: 'app-analytics',
   templateUrl: 'analytics.page.html',
   styleUrls: ['analytics.page.scss']
 })
-export class AnalyticsPage {
+export class AnalyticsPage implements OnInit, ViewDidEnter {
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
+  public revenueExpensesMatrix: RevenueExpensesMatrix = {
+    labels: [],
+    dataInflows: [],
+    dataOutflows: []
+  };
   public barChartPlugins = [];
   public barChartData: ChartConfiguration<'bar'>['data'] = {
-    labels: [ 'Janeiro', 'Fevereiro', 'Março', 'Abril' ],
+    labels: this.revenueExpensesMatrix.labels,
     datasets: [
-      { data: [ 65, 59, 80, 81, 56, 55, 90 ], label: 'Entradas', backgroundColor: '#2dd36f', },
-      { data: [ 28, 48, 40, 19, 86, 27, 90 ], label: 'Saídas',  backgroundColor: '#eb445a' }
+      { data: this.revenueExpensesMatrix.dataInflows, label: 'Entradas', backgroundColor: '#2dd36f', },
+      { data: this.revenueExpensesMatrix.dataOutflows, label: 'Saídas',  backgroundColor: '#eb445a' }
     ]
   };
 
@@ -26,7 +36,17 @@ export class AnalyticsPage {
       { data: [350, 450, 100] },
     ];
 
-  constructor() {}
+  constructor(
+    private readonly analyticsService: AnalyticsService
+  ) {}
+
+  public async ngOnInit() {
+    this.setBarChartData();
+  }
+
+  public async ionViewDidEnter() {
+    this.setBarChartData();
+  }
 
   public barChartOptions: ChartConfiguration<'bar'>['options'] = {
     responsive: true,
@@ -48,4 +68,13 @@ export class AnalyticsPage {
       }
     }
   };
+
+  public async setBarChartData () {
+    this.revenueExpensesMatrix = await this.analyticsService.getRevenueExpensesMatrix();
+    this.barChartData.labels = this.revenueExpensesMatrix.labels;
+    this.barChartData.datasets[0].data = this.revenueExpensesMatrix.dataInflows;
+    this.barChartData.datasets[1].data = this.revenueExpensesMatrix.dataOutflows;
+    if (this.chart)
+      this.chart.update();
+  }
 }
