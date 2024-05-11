@@ -7,8 +7,8 @@
     </ion-item>
 
     <ion-content>
-      <form [formGroup]="modalType === type.sent ? formSent : formReceived">
-		<ion-item class="currency-input {{modalType === type.sent ? 'received' : 'sent'}}">
+      <form [formGroup]="modalType === type.Outflows ? formOutflows : formInflows">
+		<ion-item class="currency-input {{modalType === type.Outflows ? 'outflows' : 'inflows'}}">
 			<input formControlName="amount" currencyMask #currencyInput (click)="moveCursorToEnd()">
 		</ion-item>
 

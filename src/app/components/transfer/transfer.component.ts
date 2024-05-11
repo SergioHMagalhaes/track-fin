@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from "dayjs";
 
@@ -17,9 +17,9 @@ export class TransferComponent implements OnDestroy, OnInit {
 
   @ViewChild('currencyInput') currencyInput: ElementRef | undefined;
   public isModalOpen: boolean = false;
-  public modalType: Type = Type.sent;
-  public formSent: FormGroup;
-  public formReceived: FormGroup;
+  public modalType: Type = Type.Inflows;
+  public formOutflows: FormGroup;
+  public formInflows: FormGroup;
   public value: number = 0;
   public type = Type;
   public editableEvent?: ITransfer;
@@ -32,22 +32,22 @@ export class TransferComponent implements OnDestroy, OnInit {
     private readonly dbService: DbService,
     private readonly utils: UtilsService
   ) {
-    this.formSent = this.formBuilder.group({
+    this.formOutflows = this.formBuilder.group({
       id: null,
       amount: 0,
       description: ["", Validators.required],
       category: ["", Validators.required],
       date: [dayjs().format("YYYY-MM-DDTHH:mm:ssZ"), Validators.required],
-      type: Type.sent
+      type: Type.Outflows
 		});
 
-    this.formReceived = this.formBuilder.group({
+    this.formInflows = this.formBuilder.group({
       id: null,
       amount: 0,
       description: ["", Validators.required],
       category: ["", Validators.required],
       date: [dayjs().format("YYYY-MM-DDTHH:mm:ssZ"), Validators.required],
-      type: Type.received
+      type: Type.Inflows
 		});
   }
 
@@ -73,10 +73,10 @@ export class TransferComponent implements OnDestroy, OnInit {
 
   public selectedIcon () {
     let icon
-    if (this.modalType === Type.sent)
-      icon = this.formSent.get('category')?.value as string;
+    if (this.modalType === Type.Outflows)
+      icon = this.formOutflows.get('category')?.value as string;
     else
-      icon = this.formReceived.get('category')?.value as string;
+      icon = this.formInflows.get('category')?.value as string;
     if (icon)
       return icon;
     else
@@ -97,7 +97,7 @@ export class TransferComponent implements OnDestroy, OnInit {
 	}
 
   public async save (): Promise<void> {
-    const form = this.modalType === Type.sent ? this.formSent.value : this.formReceived.value;
+    const form = this.modalType === Type.Outflows ? this.formOutflows.value : this.formInflows.value;
     delete form.id;
     await this.transferService.addTransfer(form);
 
@@ -107,7 +107,7 @@ export class TransferComponent implements OnDestroy, OnInit {
   }
 
   public async update (): Promise<void> {
-    const form = this.modalType === Type.sent ? this.formSent.value : this.formReceived.value;
+    const form = this.modalType === Type.Outflows ? this.formOutflows.value : this.formInflows.value;
     await this.transferService.updateTransfer(form);
 
     await this.transferService.setTransfers();
@@ -123,7 +123,7 @@ export class TransferComponent implements OnDestroy, OnInit {
 
     if (!confirm) return;
 
-    const form = this.modalType === Type.sent ? this.formSent.value : this.formReceived.value;
+    const form = this.modalType === Type.Outflows ? this.formOutflows.value : this.formInflows.value;
     await this.transferService.removeTransfer(form.id);
 
     await this.transferService.setTransfers();
@@ -132,7 +132,7 @@ export class TransferComponent implements OnDestroy, OnInit {
   }
 
   private resetForm (): void {
-    const form = this.modalType === Type.sent ? this.formSent : this.formReceived;
+    const form = this.modalType === Type.Outflows? this.formOutflows : this.formInflows;
 
     form.get("id")?.setValue(null);
     form.get("amount")?.setValue(0);
@@ -144,7 +144,7 @@ export class TransferComponent implements OnDestroy, OnInit {
 
   private prepareForm (): void {
     if (this.editableEvent) {
-      const form = this.modalType === Type.sent ? this.formSent : this.formReceived;
+      const form = this.modalType === Type.Outflows ? this.formOutflows : this.formInflows;
 
       form.get("id")?.setValue(this.editableEvent.id || null);
       form.get("amount")?.setValue(this.editableEvent.amount || 0);

@@ -14,7 +14,7 @@ interface IShow {
   providedIn: 'root'
 })
 export class TransferService {
-  private show = new BehaviorSubject<IShow>({ isModalOpen: false, modalType: Type.sent });
+  private show = new BehaviorSubject<IShow>({ isModalOpen: false, modalType: Type.Outflows });
   private _transfers: ITransfer[] = [];
   private transfersObservable = new BehaviorSubject<ITransfer[]>([]);
 
@@ -52,7 +52,7 @@ export class TransferService {
     const account = await this.db.account.get(1);
     if (!account) return;
 
-    if (transfer.type === Type.sent)
+    if (transfer.type === Type.Outflows)
       account.amount -= transfer.amount;
     else
       account.amount += transfer.amount;

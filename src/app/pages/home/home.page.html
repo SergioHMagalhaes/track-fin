@@ -26,8 +26,8 @@
   </ion-text>
 
   <div class="action-buttons">
-    <ion-button shape="round" (click)="showModal(true, type.received)">Adicionar</ion-button>
-    <ion-button fill="outline" (click)="showModal(true, type.sent)" shape="round">Transferir</ion-button>
+    <ion-button shape="round" (click)="showModal(true, type.Inflows)">Adicionar</ion-button>
+    <ion-button fill="outline" (click)="showModal(true, type.Outflows)" shape="round">Transferir</ion-button>
   </div>
 
   @if(transfers.length > 0) {
@@ -35,12 +35,12 @@
     <ion-list class="transactions">
       <h2>Transações</h2>
       <ion-item *ngFor="let transfer of transfers" (click)="showModal(true, transfer.type, transfer)">
-        <ion-icon slot="start" [name]="transfer.type === type.sent? 'arrow-down-outline': 'arrow-up-outline'"></ion-icon>
+        <ion-icon slot="start" [name]="transfer.type === type.Outflows? 'arrow-down-outline': 'arrow-up-outline'"></ion-icon>
         <ion-label>
           <h5>Transferência</h5>
-          <p>{{ transfer.type === type.sent? 'Pago': 'Recebido' }}</p>
+          <p>{{ transfer.type === type.Outflows? 'Pago': 'Recebido' }}</p>
         </ion-label>
-        <ion-text [color]="transfer.type === type.sent? 'danger': 'success'" slot="end">
+        <ion-text [color]="transfer.type === type.Outflows? 'danger': 'success'" slot="end">
           {{ transfer.amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}
         </ion-text>
       </ion-item>

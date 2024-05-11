@@ -52,7 +52,7 @@ export class AccountService {
 
     const transfers = await this.db.transfer.toArray();
     const amount = transfers.reduce((acc, transfer) => {
-      if (transfer.type === Type.sent)
+      if (transfer.type === Type.Outflows)
         return acc - transfer.amount;
       return acc + transfer.amount;
     }, 0);

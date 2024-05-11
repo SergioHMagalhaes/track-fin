@@ -1,6 +1,6 @@
 export enum Type {
-  sent = "sent",
-  received = "received"
+  Outflows = "outflows",
+  Inflows = "inflows"
 }
 
 export interface ITransfer {
