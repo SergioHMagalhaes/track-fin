@@ -1,0 +1,77 @@
+<ion-content [fullscreen]="true">
+
+  <div class="avatar-container">
+    <ion-avatar>
+      <img alt="" src="https://i.ibb.co/1GKmYt8/Es-Xs-Fkb-WMAIGfpp.jpg" />
+    </ion-avatar>
+    <ion-text>{{ account?.name }}</ion-text>
+
+    <ion-button shape="round" fill="outline">Alterar imagem</ion-button>
+  </div>
+
+  <ion-list class="list-container">
+    <ion-item>
+      <ion-icon slot="start" name="person-outline"></ion-icon>
+      <ion-input label="Nome" labelPlacement="stacked" disabled="true" [value]="account?.name"></ion-input>
+      <ion-icon slot="end" name="pencil" (click)="setOpen(true)"></ion-icon>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="download-outline"></ion-icon>
+      <p>Exportar dados</p>
+    </ion-item>
+  </ion-list>
+
+  <ion-footer>
+    <div class="d-flex social-media">
+      <a href="https://github.com/SergioHMagalhaes/track-fin" target="_blank">
+        <ion-icon name="logo-github"></ion-icon>
+      </a>
+      <a href="https://www.linkedin.com/in/sergiohmagalhaes/" target="_blank">
+        <ion-icon name="logo-linkedin"></ion-icon>
+      </a>
+    </div>
+
+    <ion-note>Versão: {{ appVersion }}</ion-note>
+  </ion-footer>
+
+  <ion-modal [isOpen]="isModalOpen">
+    <ng-template>
+      <ion-item>
+        <ion-text>
+          <p>Editar perfil</p>
+        </ion-text>
+        <ion-buttons slot="end">
+          <ion-button (click)="setOpen(false)">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+
+      <ion-content>
+        <div class="avatar-container">
+          <ion-avatar>
+            <img alt="" src="https://i.ibb.co/1GKmYt8/Es-Xs-Fkb-WMAIGfpp.jpg" />
+          </ion-avatar>
+          <ion-text>{{ accountName }}</ion-text>
+
+          <ion-button shape="round" fill="outline">Alterar imagem</ion-button>
+        </div>
+
+        <ion-list class="list-container">
+          <ion-item>
+            <ion-icon slot="start" name="brush-outline" aria-hidden="true"></ion-icon>
+            <ion-input [(ngModel)]="accountName" labelPlacement="stacked" label="Nome" placeholder="Adicione um nome">
+            </ion-input>
+          </ion-item>
+        </ion-list>
+
+        <div class="btn-footer">
+          <ion-button shape="round" (click)="save()">
+            <ion-icon name="checkmark-outline"></ion-icon>
+          </ion-button>
+        </div>
+        </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

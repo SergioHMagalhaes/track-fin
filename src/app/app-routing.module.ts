@@ -11,8 +11,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/analytics/analytics.module').then(m => m.Tab2PageModule)
   },
   {
-    path: 'tab3',
-    loadChildren: () => import('./pages/tab3/tab3.module').then(m => m.Tab3PageModule)
+    path: 'account',
+    loadChildren: () => import('./pages/account/account.module').then( m => m.AccountPageModule)
   },
   {
     path: '',

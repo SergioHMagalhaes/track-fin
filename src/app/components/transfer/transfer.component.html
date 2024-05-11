@@ -8,9 +8,9 @@
 
     <ion-content>
       <form [formGroup]="modalType === type.Outflows ? formOutflows : formInflows">
-		<ion-item class="currency-input {{modalType === type.Outflows ? 'outflows' : 'inflows'}}">
-			<input formControlName="amount" currencyMask #currencyInput (click)="moveCursorToEnd()">
-		</ion-item>
+		    <ion-item class="currency-input {{modalType === type.Outflows ? 'outflows' : 'inflows'}}">
+			    <input formControlName="amount" currencyMask #currencyInput (click)="moveCursorToEnd()">
+		    </ion-item>
 
         <ion-item class="first-item">
           <ion-icon slot="start" name="brush-outline" aria-hidden="true"></ion-icon>

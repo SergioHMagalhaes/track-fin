@@ -46,6 +46,11 @@ export class AccountService {
 		}
 	}
 
+  public async saveAccount(account: IAccount) {
+    await this.db.account.put(account);
+    await this.setAccount(account);
+  }
+
   public async calculateAmount() {
     const account = await this.db.account.get(1);
     if (!account) return;

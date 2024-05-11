@@ -1,0 +1,55 @@
+ion-avatar {
+  width: 100px;
+  height: 100px;
+  margin: 50px auto 20px auto;
+}
+
+.avatar-container {
+  text-align: center;
+  ion-text {
+    font-size: 15px;
+    font-weight: bold;
+    display: block;
+  }
+
+  ion-button {
+    margin-top: 10px;
+    width: 150px;
+    font-size: 10px;
+  }
+}
+
+.list-container {
+  margin: 30px 20px;
+  border-radius: 10px;
+}
+
+ion-footer {
+  text-align: center;
+  font-size: 12px;
+  position: absolute;
+  bottom: 55px;
+  padding: 20px;
+  .social-media {
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    ion-icon {
+      font-size: 22px;
+      margin: 10px;
+    }
+  }
+}
+
+.btn-footer {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  ion-button {
+    margin: 10px;
+    width: 70px;
+    height: 70px;
+  }
+}

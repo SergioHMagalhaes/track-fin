@@ -5,7 +5,6 @@ import * as dayjs from "dayjs";
 import { TransferService } from "../../services/transfer/transfer.service";
 import { Subscription } from 'rxjs';
 import { ITransfer, Type } from 'src/app/models/transfer';
-import { DbService } from 'src/app/services/db/db.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import { CategoryService } from 'src/app/services/category/category.service';
 import { ICategory, CategoryName } from 'src/app/models/category';
@@ -33,7 +32,6 @@ export class TransferComponent implements OnDestroy, OnInit {
     private readonly categoryService: CategoryService,
     private readonly transferService: TransferService,
     private readonly formBuilder: FormBuilder,
-    private readonly dbService: DbService,
     private readonly utils: UtilsService
   ) {
     this.formOutflows = this.formBuilder.group({
