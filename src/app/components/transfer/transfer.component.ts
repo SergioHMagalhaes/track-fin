@@ -4,8 +4,9 @@ import * as dayjs from "dayjs";
 
 import { TransferService } from "../../services/transfer/transfer.service";
 import { Subscription } from 'rxjs';
-import { Type } from 'src/app/models/transfer';
+import { ITransfer, Type } from 'src/app/models/transfer';
 import { DbService, Models } from 'src/app/services/db/db.service';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-transfer',
@@ -20,18 +21,19 @@ export class TransferComponent implements OnDestroy, OnInit {
   public formSent: FormGroup;
   public formReceived: FormGroup;
   public value: number = 0;
-  public type = {
-    sent: Type.sent,
-    received: Type.received
-  }
+  public type = Type;
+  public editableEvent?: ITransfer;
+
   private subscriptions: Array<Subscription | undefined> = [];
 
   constructor(
     private readonly transferService: TransferService,
     private readonly formBuilder: FormBuilder,
-    private readonly dbService: DbService
+    private readonly dbService: DbService,
+    private readonly utils: UtilsService
   ) {
     this.formSent = this.formBuilder.group({
+      id: null,
       amount: 0,
       description: ["", Validators.required],
       category: ["", Validators.required],
@@ -40,6 +42,7 @@ export class TransferComponent implements OnDestroy, OnInit {
 		});
 
     this.formReceived = this.formBuilder.group({
+      id: null,
       amount: 0,
       description: ["", Validators.required],
       category: ["", Validators.required],
@@ -87,15 +90,67 @@ export class TransferComponent implements OnDestroy, OnInit {
 				.subscribe( async show => {
           this.isModalOpen = show.isModalOpen
           this.modalType = show.modalType;
+          this.editableEvent = show.editableEvent;
+          this.prepareForm();
         })
 		);
 	}
 
-  public save (): void {
-    if (this.modalType === Type.sent)
-      this.dbService.save(Models.transfer, this.formSent.value);
-    else
-      this.dbService.save(Models.transfer, this.formReceived.value);
+  public async save (): Promise<void> {
+    const form = this.modalType === Type.sent ? this.formSent.value : this.formReceived.value;
+    delete form.id;
+    await this.dbService.save(Models.transfer, form);
+
+    await this.transferService.setTransfers();
+    this.resetForm();
     this.setOpen(false);
+  }
+
+  public async update (): Promise<void> {
+    const form = this.modalType === Type.sent ? this.formSent.value : this.formReceived.value;
+    await this.dbService.update(Models.transfer, form);
+
+    await this.transferService.setTransfers();
+    this.resetForm();
+    this.setOpen(false);
+  }
+
+  public async remove (): Promise<void> {
+    const confirm = await this.utils.prompt(
+			"Confirmação",
+			"Tem certeza de que deseja excluir esta transação? Esta ação não pode ser desfeita.",
+		);
+
+    if (!confirm) return;
+
+    const form = this.modalType === Type.sent ? this.formSent.value : this.formReceived.value;
+    await this.dbService.remove(Models.transfer, form.id);
+
+    await this.transferService.setTransfers();
+    this.resetForm();
+    this.setOpen(false);
+  }
+
+  private resetForm (): void {
+    const form = this.modalType === Type.sent ? this.formSent : this.formReceived;
+
+    form.get("id")?.setValue(null);
+    form.get("amount")?.setValue(0);
+    form.get("description")?.setValue("");
+    form.get("category")?.setValue("");
+    form.get("date")?.setValue(dayjs().format("YYYY-MM-DDTHH:mm:ssZ"));
+
+  }
+
+  private prepareForm (): void {
+    if (this.editableEvent) {
+      const form = this.modalType === Type.sent ? this.formSent : this.formReceived;
+
+      form.get("id")?.setValue(this.editableEvent.id || null);
+      form.get("amount")?.setValue(this.editableEvent.amount || 0);
+      form.get("description")?.setValue(this.editableEvent.description || "");
+      form.get("category")?.setValue(this.editableEvent.category || "");
+      form.get("date")?.setValue(this.editableEvent.date || dayjs().format("YYYY-MM-DDTHH:mm:ssZ"));
+    }
   }
 }

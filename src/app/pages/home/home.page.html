@@ -16,7 +16,6 @@
     </ion-grid>
   </nav>
 
-
   <ion-text class="balance">
     <p>Saldo em contas</p>
     <h1>R$ 55,99</h1>
@@ -29,7 +28,7 @@
 
   <ion-list class="transactions">
     <h2>Transações</h2>
-    <ion-item *ngFor="let transfer of transfers">
+    <ion-item *ngFor="let transfer of transfers" (click)="showModal(true, transfer.type, transfer)">
       <ion-icon slot="start" [name]="transfer.type === type.sent? 'arrow-up-outline': 'arrow-down-outline'"></ion-icon>
       <ion-label>
         <h5>Transferência</h5>

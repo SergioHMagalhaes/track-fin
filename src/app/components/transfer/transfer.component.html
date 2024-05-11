@@ -44,11 +44,15 @@
           </ion-modal>
         </ion-item>
 
-        <ion-fab horizontal="center" vertical="bottom" (click)="save()">
-          <ion-fab-button>
+        <div class="btn-footer">
+          <ion-button *ngIf="editableEvent" color="danger" shape="round" (click)="remove()">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+
+          <ion-button shape="round" (click)="editableEvent ? update() : save()">
             <ion-icon name="checkmark-outline"></ion-icon>
-          </ion-fab-button>
-        </ion-fab>
+          </ion-button>
+        </div>
       </form>
     </ion-content>
   </ng-template>

@@ -29,6 +29,18 @@ ion-fab {
   padding-bottom: 50px;
 }
 
+.btn-footer {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  ion-button {
+    margin: 10px;
+    width: 70px;
+    height: 70px;
+  }
+}
+
 form {
   .first-item {
     padding-top: 30px;

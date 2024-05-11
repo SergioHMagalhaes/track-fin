@@ -30,7 +30,8 @@ export class DbService extends Dexie {
   }
 
   public async update(model: Models, data: ITransfer) {
-	  await db[model].put(data);
+    if (!data.id) return;
+    await db[model].update(data.id, data);
   }
 
   public async remove(model: Models, id: number) {
