@@ -7,6 +7,25 @@
 </ion-header>
 
 <ion-content class="ion-padding" [fullscreen]="true">
+  <ion-item class="balance">
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col>
+          <h4>Nesse ano de {{ currentYear }} você teve gasto médio mensal de:</h4>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <h1>{{
+            averageAnnualSpending ?
+            averageAnnualSpending.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) :
+            "R$ 0,00"
+          }}</h1>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+
   <ion-card>
     <ion-card-header>
       <ion-card-title>Receitas x despesas</ion-card-title>

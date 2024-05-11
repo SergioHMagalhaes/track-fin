@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ViewDidEnter } from '@ionic/angular';
 import { ChartConfiguration } from 'chart.js';
+import * as dayjs from 'dayjs';
 import { BaseChartDirective } from 'ng2-charts';
 import { AnalyticsService, RevenueExpensesMatrix } from 'src/app/services/analytics/analytics.service';
 
@@ -12,6 +13,8 @@ import { AnalyticsService, RevenueExpensesMatrix } from 'src/app/services/analyt
 export class AnalyticsPage implements OnInit, ViewDidEnter {
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
+  public currentYear = dayjs().year();
+  public averageAnnualSpending = 0;
   public revenueExpensesMatrix: RevenueExpensesMatrix = {
     labels: [],
     dataInflows: [],
@@ -50,11 +53,13 @@ export class AnalyticsPage implements OnInit, ViewDidEnter {
   public async ngOnInit() {
     this.setBarChartData();
     this.setDoughnutChartData();
+    this.averageAnnualSpending = await this.analyticsService.getAverageAnnualSpending();
   }
 
   public async ionViewDidEnter() {
     this.setBarChartData();
     this.setDoughnutChartData();
+    this.averageAnnualSpending = await this.analyticsService.getAverageAnnualSpending();
   }
 
   public barChartOptions: ChartConfiguration<'bar'>['options'] = {

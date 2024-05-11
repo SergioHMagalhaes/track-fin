@@ -87,4 +87,18 @@ export class AnalyticsService {
 
     return { labels, data };
   }
+
+  public async getAverageAnnualSpending (): Promise<number> {
+    const { dataOutflows } = await this.getRevenueExpensesMatrix();
+    const matrizLength = dataOutflows.length;
+    const weights = dataOutflows.map(() => 1 / matrizLength);
+
+    let sum = 0;
+
+    for (let i = 0; i < matrizLength; i++) {
+      sum += dataOutflows[i] * weights[i];
+    }
+
+    return sum
+  }
 }
