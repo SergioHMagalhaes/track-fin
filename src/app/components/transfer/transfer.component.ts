@@ -37,7 +37,7 @@ export class TransferComponent implements OnDestroy, OnInit {
     this.formOutflows = this.formBuilder.group({
       id: null,
       amount: 0,
-      description: ["", Validators.required],
+      description: [""],
       category: [null, Validators.required],
       date: [dayjs().format("YYYY-MM-DDTHH:mm:ssZ"), Validators.required],
       type: Type.Outflows
@@ -46,7 +46,7 @@ export class TransferComponent implements OnDestroy, OnInit {
     this.formInflows = this.formBuilder.group({
       id: null,
       amount: 0,
-      description: ["", Validators.required],
+      description: [""],
       category: [null, Validators.required],
       date: [dayjs().format("YYYY-MM-DDTHH:mm:ssZ"), Validators.required],
       type: Type.Inflows
@@ -143,6 +143,11 @@ export class TransferComponent implements OnDestroy, OnInit {
     await this.transferService.setTransfers();
     this.resetForm();
     this.setOpen(false);
+  }
+
+  public disabledSaveButton (): boolean {
+    const form = this.modalType === Type.Outflows ? this.formOutflows : this.formInflows;
+    return form.invalid || form.get("amount")?.value <= 0;
   }
 
   private resetForm (): void {

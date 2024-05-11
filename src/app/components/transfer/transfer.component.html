@@ -2,7 +2,9 @@
   <ng-template>
     <ion-item>
       <ion-buttons slot="end">
-        <ion-button (click)="setOpen(false)">Close</ion-button>
+        <ion-button (click)="setOpen(false)">
+          <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
       </ion-buttons>
     </ion-item>
 
@@ -43,7 +45,7 @@
             <ion-icon name="trash-outline"></ion-icon>
           </ion-button>
 
-          <ion-button shape="round" (click)="editableEvent ? update() : save()">
+          <ion-button [disabled]="disabledSaveButton()" shape="round" (click)="editableEvent ? update() : save()">
             <ion-icon name="checkmark-outline"></ion-icon>
           </ion-button>
         </div>
