@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import Dexie, { Table } from 'dexie';
 
+import { IAccount } from 'src/app/models/account';
 import { ITransfer } from 'src/app/models/transfer';
 
 export enum Models {
-  transfer = 'transfer'
+  Account = 'account',
+  Transfer = 'transfer'
 }
 
 @Injectable({
@@ -12,30 +14,15 @@ export enum Models {
 })
 export class DbService extends Dexie {
 
+  public account!: Table<IAccount, number>;
   public transfer!: Table<ITransfer, number>;
 
   constructor() {
     super('track-fin');
     this.version(1).stores({
+      account: '++id,name,amount',
       transfer: '++id,category,description,amount,date,type',
     });
-  }
-
-  public async save(model: Models, data: ITransfer) {
-    await db[model].add(data);
-  }
-
-  public async getAll(model: Models) {
-	  return await db[model].toArray();
-  }
-
-  public async update(model: Models, data: ITransfer) {
-    if (!data.id) return;
-    await db[model].update(data.id, data);
-  }
-
-  public async remove(model: Models, id: number) {
-	  await db[model].delete(id);
   }
 }
 

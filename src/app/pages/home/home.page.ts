@@ -4,7 +4,9 @@ import { Subscription } from 'rxjs';
 
 import { TransferService } from "../../services/transfer/transfer.service";
 import { ITransfer, Type } from 'src/app/models/transfer';
-import { DbService, Models } from 'src/app/services/db/db.service';
+import { AccountService } from 'src/app/services/account/account.service';
+
+import { IAccount } from 'src/app/models/account';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +15,7 @@ import { DbService, Models } from 'src/app/services/db/db.service';
 })
 export class HomePage implements ViewDidEnter, ViewWillLeave {
 
+  public account: IAccount | null = null;
   public type = Type;
   public isModalOpen = false;
   public transfers: ITransfer[] = [];
@@ -20,14 +23,18 @@ export class HomePage implements ViewDidEnter, ViewWillLeave {
   private subscriptions: Array<Subscription | undefined> = [];
 
   constructor(
-    private readonly db: DbService,
+    private readonly accountService: AccountService,
     private readonly transferService: TransferService
   ) { }
 
   public async ionViewDidEnter() {
     await this.transferService.setTransfers();
-    this.transfers = await this.db.getAll(Models.transfer);
+    this.transfers = this.transferService.transfers;
+    await this.accountService.setAccount();
+    this.account = this.accountService.account;
+
     this.getTransfers();
+    this.getAccount();
   }
 
   public ionViewWillLeave (): void {
@@ -45,6 +52,16 @@ export class HomePage implements ViewDidEnter, ViewWillLeave {
 				.getTransfersObservable()
 				.subscribe(
 					transfers => (this.transfers = transfers)
+				)
+		);
+	}
+
+  public getAccount (): void {
+		this.subscriptions.push(
+			this.accountService
+				.getAccountObservable()
+				.subscribe(
+					account => (this.account = account)
 				)
 		);
 	}

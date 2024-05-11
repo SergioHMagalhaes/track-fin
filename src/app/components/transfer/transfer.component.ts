@@ -99,7 +99,7 @@ export class TransferComponent implements OnDestroy, OnInit {
   public async save (): Promise<void> {
     const form = this.modalType === Type.sent ? this.formSent.value : this.formReceived.value;
     delete form.id;
-    await this.dbService.save(Models.transfer, form);
+    await this.transferService.addTransfer(form);
 
     await this.transferService.setTransfers();
     this.resetForm();
@@ -108,7 +108,7 @@ export class TransferComponent implements OnDestroy, OnInit {
 
   public async update (): Promise<void> {
     const form = this.modalType === Type.sent ? this.formSent.value : this.formReceived.value;
-    await this.dbService.update(Models.transfer, form);
+    await this.transferService.updateTransfer(form);
 
     await this.transferService.setTransfers();
     this.resetForm();
@@ -124,7 +124,7 @@ export class TransferComponent implements OnDestroy, OnInit {
     if (!confirm) return;
 
     const form = this.modalType === Type.sent ? this.formSent.value : this.formReceived.value;
-    await this.dbService.remove(Models.transfer, form.id);
+    await this.transferService.removeTransfer(form.id);
 
     await this.transferService.setTransfers();
     this.resetForm();

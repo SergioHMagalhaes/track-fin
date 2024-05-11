@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from "rxjs";
 import { ITransfer, Type } from 'src/app/models/transfer';
 import { DbService, Models } from '../db/db.service';
+import { AccountService } from '../account/account.service';
 
 interface IShow {
   isModalOpen: boolean;
@@ -19,9 +20,10 @@ export class TransferService {
 
   constructor(
     private readonly db: DbService,
+    private readonly accountService: AccountService
   ) { }
 
-  public get transfers (): ITransfer[] | null {
+  public get transfers (): ITransfer[] {
 		return this._transfers;
 	}
 
@@ -34,7 +36,7 @@ export class TransferService {
 		if (value)
 			transfers = value;
 		else
-    transfers = await this.db.getAll(Models.transfer);
+    transfers = await this.db.transfer.toArray();
 
 		if (transfers) {
 			this._transfers = transfers;
@@ -45,6 +47,31 @@ export class TransferService {
 			this.transfersObservable.next([]);
 		}
 	}
+
+  public async addTransfer (transfer: ITransfer): Promise<void> {
+    const account = await this.db.account.get(1);
+    if (!account) return;
+
+    if (transfer.type === Type.sent)
+      account.amount -= transfer.amount;
+    else
+      account.amount += transfer.amount;
+
+    await this.db.transfer.add(transfer);
+    await this.db.account.put(account);
+    await this.accountService.setAccount();
+  }
+
+  public async updateTransfer (transfer: ITransfer): Promise<void> {
+    if (!transfer.id) return;
+    await this.db.transfer.update(transfer.id, transfer);
+    await this.accountService.calculateAmount();
+  }
+
+  public async removeTransfer (id: number): Promise<void> {
+    await this.db.transfer.delete(id);
+    await this.accountService.calculateAmount();
+  }
 
   public getShow (): Observable<IShow> {
 		return this.show.asObservable();
