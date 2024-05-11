@@ -35,7 +35,7 @@
     <ion-list class="transactions">
       <h2>Transações</h2>
       <ion-item *ngFor="let transfer of transfers" (click)="showModal(true, transfer.type, transfer)">
-        <ion-icon slot="start" [name]="transfer.type === type.sent? 'arrow-up-outline': 'arrow-down-outline'"></ion-icon>
+        <ion-icon slot="start" [name]="transfer.type === type.sent? 'arrow-down-outline': 'arrow-up-outline'"></ion-icon>
         <ion-label>
           <h5>Transferência</h5>
           <p>{{ transfer.type === type.sent? 'Pago': 'Recebido' }}</p>

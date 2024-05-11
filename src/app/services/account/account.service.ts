@@ -55,9 +55,10 @@ export class AccountService {
       if (transfer.type === Type.sent)
         return acc - transfer.amount;
       return acc + transfer.amount;
-    }, account.amount);
+    }, 0);
 
     account.amount = amount;
     await this.db.account.put(account);
+    await this.setAccount(account);
   }
 }
