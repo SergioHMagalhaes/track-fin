@@ -68,3 +68,5 @@ testem.log
 Thumbs.db
 
 /.nx
+
+/key-store
