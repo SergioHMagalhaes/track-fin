@@ -9,6 +9,8 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 import { CategoryService } from 'src/app/services/category/category.service';
 import { ICategory, CategoryName } from 'src/app/models/category';
 
+import { Keyboard } from '@capacitor/keyboard';
+
 @Component({
   selector: 'app-transfer',
   templateUrl: './transfer.component.html',
@@ -25,6 +27,7 @@ export class TransferComponent implements OnDestroy, OnInit {
   public type = Type;
   public editableEvent?: ITransfer;
   public categories: ICategory[] = [];
+  public keyboardVisible = false;
 
   private subscriptions: Array<Subscription | undefined> = [];
 
@@ -58,6 +61,14 @@ export class TransferComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit (): void {
+    Keyboard.addListener('keyboardWillShow', () => {
+      this.keyboardVisible = true;
+    });
+
+    Keyboard.addListener('keyboardWillHide', () => {
+      this.keyboardVisible = false;
+    });
+
     this.categories = this.categoryService.categories;
 		this.getDisplay();
     this.prepareForm();

@@ -3,6 +3,8 @@ import { IAccount } from 'src/app/models/account';
 import { AccountService } from 'src/app/services/account/account.service';
 import { environment } from "src/environments/environment";
 
+import { Keyboard } from '@capacitor/keyboard';
+
 @Component({
   selector: 'app-account',
   templateUrl: './account.page.html',
@@ -14,12 +16,21 @@ export class AccountPage implements OnInit {
   public isModalOpen: boolean = false;
   public account?: IAccount | null = null;
   public accountName: string = '';
+  public keyboardVisible = false;
 
   constructor(
     private readonly accountService: AccountService,
   ) {}
 
   async ngOnInit() {
+    Keyboard.addListener('keyboardWillShow', () => {
+      this.keyboardVisible = true;
+    });
+
+    Keyboard.addListener('keyboardWillHide', () => {
+      this.keyboardVisible = false;
+    });
+
     await this.accountService.setAccount();
     this.account = this.accountService.account;
     this.accountName = this.account?.name || '';

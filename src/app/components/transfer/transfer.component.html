@@ -11,7 +11,7 @@
     <ion-content>
       <form [formGroup]="modalType === type.Outflows ? formOutflows : formInflows">
 		    <ion-item class="currency-input {{modalType === type.Outflows ? 'outflows' : 'inflows'}}">
-			    <input formControlName="amount" currencyMask #currencyInput (click)="moveCursorToEnd()">
+			    <input type="number" formControlName="amount" currencyMask #currencyInput (click)="moveCursorToEnd()">
 		    </ion-item>
 
         <ion-item class="first-item">
@@ -40,7 +40,7 @@
           </ion-modal>
         </ion-item>
 
-        <div class="btn-footer">
+        <div class="btn-footer" *ngIf="!keyboardVisible">
           <ion-button *ngIf="editableEvent" color="danger" shape="round" (click)="remove()">
             <ion-icon name="trash-outline"></ion-icon>
           </ion-button>

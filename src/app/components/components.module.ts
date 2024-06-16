@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { IonicModule } from "@ionic/angular";
 
-
 import { TransferComponent } from "./transfer/transfer.component";
 
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';

@@ -65,7 +65,7 @@
           </ion-item>
         </ion-list>
 
-        <div class="btn-footer">
+        <div class="btn-footer" *ngIf="!keyboardVisible">
           <ion-button shape="round" (click)="save()">
             <ion-icon name="checkmark-outline"></ion-icon>
           </ion-button>
